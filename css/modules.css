@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+* {
+    font-family: 'Berkshire Swash', cursive;
+}
+div {
+    background-color: rgb(194, 130, 255);
+    border: black solid 1px;
+    border-radius: 20px;
+    font-family: 'Berkshire Swash', cursive
+}
+header {
+    background-color: rgb(36, 36, 36);
+}
+h1 {
+    font-family: 'Berkshire Swash', cursive;
+    color: #eee;
+}
+footer {
+    font-family: 'Berkshire Swash', cursive;
+    text-align: center;
+}
