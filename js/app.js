@@ -1,67 +1,168 @@
 'use strict';
-let objArr = [];
+let objArrOne = [];
+let objArrTwo = [];
 let keyWord = [];
+let keyWordTwo = [];
 let inx = 0;
-function Animals(img, title, des, key, horns){
-    this.img = img;
-    this.title = title;
-    this.des = des;
-    this.key = key;
-    this.horns = horns;
+function Animals(bigObjArr) {
+    for (let key in bigObjArr) {
+        this[key] = bigObjArr[key]
+    }
     this.id = inx;
-    objArr.push(this)
-}
-let container;
-Animals.prototype.renderAll = function() {
-    container = $('#photo-template').clone();
-    $('main').append(container);
-    container.find('h2').text(this.title);
-    container.find('img').attr('src',this.img);
-    container.find('p').text(this.key);
-    container.removeAttr('id');
-    container.attr('id', this.id);
     inx++;
 }
-Animals.prototype.addOption = function(){ 
-    if (keyWord.includes(this.key)){
+let container;
+Animals.prototype.renderDivs = function () {
+    $('section').hide();
+    $('div').show();
+    container = $('#photo-template').clone();
+    container.attr('id', this.id);
+    $('main').append(container);
+    container.find('h2').text(this.title);
+    container.find('img').attr('src', this.image_url);
+    container.find('p').text(this.keyword);
+    $('#photo-template').hide();
 
-    }else{
-        keyWord.push(this.key)
-        let newOption = $('<option></option>');
-        $('#select').append(newOption);
-        newOption.text(this.key);
-}}
+}
+let n = 0;
+Animals.prototype.renderSection = function () {
 
-function renderSelect () {
-    $('#select').on('click', function(){
-        for (let i = 0; i<inx; i++){
-            if (objArr[i].key == $('#select').val()) {
-                $('#'+i).show();
-            }else{
-                if($('#select').val() == 'default'){
-                    $('#'+i).show();
-                }else{
-                $('#'+i).hide();
-            }}
+    let template = $('#tempOne').html();
+    let html = Mustache.render(template, objArrTwo[n]);
+    // template.find('img').attr('src', this.image_url)
+    $('section:last').attr('id', n + 20)
+    n++
+    return html;
+}
+
+let addOptionOne = function () {
+    $('#select').empty();
+    keyWord = [];
+    let mainOption = $('<option></option>');
+    $('#select').append(mainOption);
+    mainOption.text('Filter by Keyword');
+    objArrOne.forEach(element => {
+        
+        if (!keyWord.includes(element.keyword)) {
+            keyWord.push(element.keyword)
+            
+            let newOption = $('<option></option>');
+            $('#select').append(newOption);
+            newOption.text(element.keyword);
         }
+        
+    });
+}
+
+let addOptionTwo = function () {
+    $('#select').empty();
+    keyWordTwo = [];
+    let newOption = $('<option></option>');
+    $('#select').append(newOption);
+    newOption.text('Filter by Keywords');
+    objArrTwo.forEach(element => {
+    
+        if (!keyWordTwo.includes(element.keyword)) {
+            keyWordTwo.push(element.keyword)
+            let newOption = $('<option></option>');
+            $('#select').append(newOption);
+            newOption.text(element.keyword);
+        }
+    });    
+    
+}
+
+function renderOne() {
+    
+    $('#select').on('change', function () {
+        let selected = $('#select').val();
+        for (let i = 0; i < objArrOne.length; i++){
+            // $('#' + element.id).hide();
+            if (selected == 'Filter by Keyword') {
+                $('#' + i).show();
+            } else if (selected == objArrOne[i].keyword) {
+                $('#' + i).show();
+            }else{
+                $('#' + i).hide();
+            }
+        };
+        console.log(selected)
     })
 }
 
+function renderTwo() {
+    $('#select').on('change', function () {
+        let selected = $('#select').val();
+        for (let i = 21; i < 41; i++){
+            // $('#' + i).hide();
+            if (selected == 'Filter by Keywords') {
+                $('#' + i).show();
+            } else if (selected == objArrTwo[i-21].keyword) {
+                $('#' + i).show();
+            }else{
+                $('#' + i).hide();
+            }
+        };
+        $('div').hide();
+    })
+}
 
-function getData() {
-    const ajaxSettings = {
-        method: 'get',
-        dataType: 'json'
-    };
-    $.ajax('data/page-1.json', ajaxSettings).then( data => {
-        data.forEach(element => {
-            let newAnimal = new Animals(element.image_url, element.title, element.description, element.keyword, element.horns);
-            newAnimal.renderAll();
-            newAnimal.addOption();
-        });
-    }
+const ajaxSettings = {
+    method: 'get',
+    dataType: 'json'
+};
+$.ajax('data/page-1.json', ajaxSettings).then(data => {
+    data.forEach(element => {
+        let firstAnimal = new Animals(element);
+        objArrOne.push(element)
+        firstAnimal.renderDivs();
+    });
+    addOptionOne();
+    ch = 0;
+}
+);
+
+let buttonOne = $('<button>Page One</button>');
+$('header').append(buttonOne);
+buttonOne.on('click', function () {
+    $('#select').empty();
+    addOptionOne();
     
-    )}
+    $('section').hide();
+    $('div').show();
+    $('#photo-template').hide();
+    
+});
+renderOne();
 
-$('document').ready(getData);
-renderSelect();
+
+
+
+const ajaxSetting = {
+    method: 'get',
+    dataType: 'json'
+};
+$.ajax('data/page-2.json', ajaxSetting).then(datas => {
+    datas.forEach(element => {
+        let secondAnimal = new Animals(element);
+        objArrTwo.push(element)
+        $('main').append(secondAnimal.renderSection());
+        console.log('hello')
+        $('section:last').attr('id', n + 20)
+        $('section').hide();
+    })
+
+})
+
+let buttonTwo = $('<button>Page Two</button>');
+$('header').append(buttonTwo);
+buttonTwo.on('click', function () {
+    $('#select').empty();
+    addOptionTwo();
+    $('div').hide();
+    $('section').show();
+    renderTwo()
+    console.log(objArrOne)
+    console.log(objArrTwo)
+
+})
