@@ -30,14 +30,14 @@ Animals.prototype.renderSection = function () {
     let template = $('#tempOne').html();
     let html = Mustache.render(template, objArrTwo[n]);
     // template.find('img').attr('src', this.image_url)
-    $('section').attr('src', n + 20)
+    $('section:last').attr('id', n + 20)
     n++
     return html;
 }
 
 let addOptionOne = function () {
     $('#select').empty();
-    console.log($('#select'))
+    keyWord = [];
     let mainOption = $('<option></option>');
     $('#select').append(mainOption);
     mainOption.text('Filter by Keyword');
@@ -56,6 +56,7 @@ let addOptionOne = function () {
 
 let addOptionTwo = function () {
     $('#select').empty();
+    keyWordTwo = [];
     let newOption = $('<option></option>');
     $('#select').append(newOption);
     newOption.text('Filter by Keywords');
@@ -72,6 +73,7 @@ let addOptionTwo = function () {
 }
 
 function renderOne() {
+    
     $('#select').on('change', function () {
         let selected = $('#select').val();
         for (let i = 0; i < objArrOne.length; i++){
@@ -91,11 +93,11 @@ function renderOne() {
 function renderTwo() {
     $('#select').on('change', function () {
         let selected = $('#select').val();
-        for (let i = 20; i < 40; i++){
-            $('section#' + i).hide();
+        for (let i = 21; i < 41; i++){
+            // $('#' + i).hide();
             if (selected == 'Filter by Keywords') {
                 $('#' + i).show();
-            } else if (selected == objArrTwo[i].keyword) {
+            } else if (selected == objArrTwo[i-21].keyword) {
                 $('#' + i).show();
             }else{
                 $('#' + i).hide();
@@ -116,13 +118,16 @@ $.ajax('data/page-1.json', ajaxSettings).then(data => {
         firstAnimal.renderDivs();
     });
     addOptionOne();
+    ch = 0;
 }
 );
 
 let buttonOne = $('<button>Page One</button>');
 $('header').append(buttonOne);
 buttonOne.on('click', function () {
+    $('#select').empty();
     addOptionOne();
+    
     $('section').hide();
     $('div').show();
     $('#photo-template').hide();
@@ -143,6 +148,7 @@ $.ajax('data/page-2.json', ajaxSetting).then(datas => {
         objArrTwo.push(element)
         $('main').append(secondAnimal.renderSection());
         console.log('hello')
+        $('section:last').attr('id', n + 20)
         $('section').hide();
     })
 
