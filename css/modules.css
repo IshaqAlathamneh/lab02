@@ -9,6 +9,12 @@ div {
     border-radius: 20px;
     font-family: 'Berkshire Swash', cursive
 }
+section {
+    background-color: rgb(194, 130, 255);
+    border: black solid 1px;
+    border-radius: 20px;
+    font-family: 'Berkshire Swash', cursive
+}
 header {
     background-color: rgb(36, 36, 36);
 }

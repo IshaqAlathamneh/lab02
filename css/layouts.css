@@ -4,6 +4,20 @@ div {
     height: 220px;
     float: left;
 }
+section {
+    position: relative;
+    width: 200px;
+    height: 220px;
+    float: left;
+}
+section img {
+    position: absolute;
+    width: 150px;
+    height: 170px;
+    left: 50%;
+    margin-left: -75px;
+    top: 25px;
+}
 #photo-template {
     display: none;
 }
