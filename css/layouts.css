@@ -55,16 +55,33 @@ main {
     height: auto;
     margin: 40px auto;
 }
+#cont {
+    display: flex;
+    flex-wrap: wrap;
+    width: 820px;
+    height: auto;
+    background-color: #eee;
+    border: none;
+}
 footer {
     padding-top: 50px;
     margin-bottom: 50px;
     clear: both;
 }
-select {
+#select {
     position: relative;
     width: 150px;
     margin-top: 50px;
     margin-bottom: 50px;
     left: 50%;
     margin-left: -75px;
+}
+#selectTwo{
+    position: relative;
+    width: 150px;
+    margin-top: 50px;
+    top: 30px;
+    margin-bottom: 50px;
+    left: 50%;
+    margin-left: -154px;
 }
