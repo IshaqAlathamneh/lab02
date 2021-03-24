@@ -17,7 +17,7 @@ Animals.prototype.renderDivs = function () {
     $('div').show();
     container = $('#photo-template').clone();
     container.attr('id', this.id);
-    $('main').append(container);
+    $('#cont').append(container);
     container.find('h2').text(this.title);
     container.find('img').attr('src', this.image_url);
     container.find('p').text(this.keyword);
@@ -42,15 +42,15 @@ let addOptionOne = function () {
     $('#select').append(mainOption);
     mainOption.text('Filter by Keyword');
     objArrOne.forEach(element => {
-        
+
         if (!keyWord.includes(element.keyword)) {
             keyWord.push(element.keyword)
-            
+
             let newOption = $('<option></option>');
             $('#select').append(newOption);
             newOption.text(element.keyword);
         }
-        
+
     });
 }
 
@@ -61,28 +61,28 @@ let addOptionTwo = function () {
     $('#select').append(newOption);
     newOption.text('Filter by Keywords');
     objArrTwo.forEach(element => {
-    
+
         if (!keyWordTwo.includes(element.keyword)) {
             keyWordTwo.push(element.keyword)
             let newOption = $('<option></option>');
             $('#select').append(newOption);
             newOption.text(element.keyword);
         }
-    });    
-    
+    });
+
 }
 
 function renderOne() {
-    
+
     $('#select').on('change', function () {
         let selected = $('#select').val();
-        for (let i = 0; i < objArrOne.length; i++){
+        for (let i = 0; i < objArrOne.length; i++) {
             // $('#' + element.id).hide();
             if (selected == 'Filter by Keyword') {
                 $('#' + i).show();
             } else if (selected == objArrOne[i].keyword) {
                 $('#' + i).show();
-            }else{
+            } else {
                 $('#' + i).hide();
             }
         };
@@ -93,20 +93,112 @@ function renderOne() {
 function renderTwo() {
     $('#select').on('change', function () {
         let selected = $('#select').val();
-        for (let i = 21; i < 41; i++){
+        for (let i = 21; i < 41; i++) {
             // $('#' + i).hide();
             if (selected == 'Filter by Keywords') {
                 $('#' + i).show();
-            } else if (selected == objArrTwo[i-21].keyword) {
+            } else if (selected == objArrTwo[i - 21].keyword) {
                 $('#' + i).show();
-            }else{
+            } else {
                 $('#' + i).hide();
             }
         };
         $('div').hide();
+        $('#cont').show();
     })
 }
+function sortingOne() {
+    $('#selectTwo').on('change', function () {
+        let secSelect = $('#selectTwo').val();
+        let container2;
+        if (secSelect == 'A to Z') {
+            $('div').hide();
+            $('#cont').empty();
+            objArrOne.sort((a, b) => {
+                if (a.title > b.title) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+            objArrOne.forEach(function (element, index) {
+                container2 = $('#photo-template').clone();
+                container2.attr('id', index);
+                console.log(container2)
+                $('#cont').append(container2);
+                container2.find('h2').text(element.title);
+                container2.find('img').attr('src', element.image_url);
+                container2.find('p').text(element.keyword);
+                $('div').show();
+                $('#photo-template').hide();
+            });
 
+        } else if (secSelect == 'By Horns') {
+            $('div').hide();
+            $('#cont').empty();
+            objArrOne.sort((a, b) => a.horns - b.horns);
+            objArrOne.forEach(function (element, index) {
+                container2 = $('#photo-template').clone();
+                container2.attr('id', index);
+                $('#cont').append(container2);
+                container2.find('h2').text(element.title);
+                container2.find('img').attr('src', element.image_url);
+                container2.find('p').text(element.keyword);
+                $('div').show();
+                $('#photo-template').hide();
+            }
+            );
+        }
+    })
+}
+sortingOne()
+function sortingTwo() {
+    $('#selectTwo').on('change', function () {
+        let secSelect = $('#selectTwo').val();
+        let container2;
+        if (secSelect == 'A to Z') {
+            $('div').hide();
+            $('section').hide();
+            $('section').empty();
+            objArrTwo.sort((a, b) => {
+                if (a.title > b.title) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+            objArrTwo.forEach(function (element, index) {
+                container2 = $('<section></section>')
+                container2.attr('id', index + 21);
+                console.log(container2)
+                $('#cont').append(container2);
+                container2.append('<h2></h2> <img/> <p></p>')
+                container2.find('h2').text(element.title);
+                container2.find('img').attr('src', element.image_url);
+                container2.find('p').text(element.keyword);
+                $('#cont').show();
+                $('#cont section').show();
+            });
+
+        } else if (secSelect == 'By Horns') {
+            $('div').hide();
+            $('#cont').empty();
+            objArrTwo.sort((a, b) => a.horns - b.horns);
+            objArrTwo.forEach(function (element, index) {
+                container2 = $('<section></section>')
+                container2.attr('id', index + 21);
+                console.log(container2)
+                $('#cont').append(container2);
+                container2.append('<h2></h2> <img/> <p></p>')
+                container2.find('h2').text(element.title);
+                container2.find('img').attr('src', element.image_url);
+                container2.find('p').text(element.keyword);
+                $('#cont').show();
+                $('#cont section').show();
+            });
+        }
+
+})};
 const ajaxSettings = {
     method: 'get',
     dataType: 'json'
@@ -118,7 +210,6 @@ $.ajax('data/page-1.json', ajaxSettings).then(data => {
         firstAnimal.renderDivs();
     });
     addOptionOne();
-    ch = 0;
 }
 );
 
@@ -127,11 +218,11 @@ $('header').append(buttonOne);
 buttonOne.on('click', function () {
     $('#select').empty();
     addOptionOne();
-    
+
     $('section').hide();
     $('div').show();
     $('#photo-template').hide();
-    
+
 });
 renderOne();
 
@@ -162,6 +253,7 @@ buttonTwo.on('click', function () {
     $('div').hide();
     $('section').show();
     renderTwo()
+    sortingTwo()
     console.log(objArrOne)
     console.log(objArrTwo)
 
